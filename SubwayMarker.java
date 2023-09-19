@@ -33,11 +33,14 @@ public class SubwayMarker extends CommonMarker {
         int yOffset = 15;
         int textMarginX = 3;
         int textMarginY = 3;
-        int boxHeight = 50;
         int cornerRadius = 5;
         int horizontalPadding = 2 * textMarginX;
         int boxWidth = (int)Math.max(pg.textWidth(stationComplex), pg.textWidth(totalRidership)) + horizontalPadding;
         int lineHeight = 15;
+
+        // Use a reasonable hard-coded constant, lest we end up with a
+        // somewhat complicated expression for this.
+        int boxHeight = 40;
 
         pg.stroke(110);
         pg.fill(255, 255, 0);
