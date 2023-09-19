@@ -18,12 +18,26 @@ public class MTAMap extends PApplet {
     private List<Marker> subwayMarkers;
     private CommonMarker lastSelected;
 
+    // Map 'station_complex_id' to total ridership for this day
+    // (e.g. Jan 1, 2023)
+    private HashMap<String, Integer> totalRidershipTable;
+
     public MTAMap(List<PointFeature> pointFeatures) {
         subwayMarkers = new ArrayList<>();
+        totalRidershipTable = new HashMap<>();
 
         for (PointFeature pointFeature : pointFeatures) {
+            // Gather map markers
             SubwayMarker subwayMarker = new SubwayMarker(pointFeature);
             subwayMarkers.add(subwayMarker);
+
+            // Build totalRidershipTable
+            int currentRidershipCount = Integer.parseInt(getStringProperty(pointFeature, "ridership"));
+            String stationComplexID = getStringProperty(pointFeature, "station_complex_id");
+            int ridershipCount = totalRidershipTable.getOrDefault(stationComplexID, 0);
+
+            ridershipCount += currentRidershipCount;
+            totalRidershipTable.put(stationComplexID, ridershipCount);
         }
     }
 
@@ -40,11 +54,17 @@ public class MTAMap extends PApplet {
         MapUtils.createDefaultEventDispatcher(this, map);
 
         map.addMarkers(subwayMarkers);
+
+        System.out.println(totalRidershipTable);
     }
 
     public void draw() {
         background(165, 103, 41);
         map.draw();
+    }
+
+    private String getStringProperty(PointFeature pointFeature, String propertyName) {
+        return (String)pointFeature.getProperty(propertyName);
     }
 
     /* Event handling */
