@@ -18,7 +18,12 @@ public class SubwayMarker extends CommonMarker {
     @Override
     public void showTitle(PGraphics pg, float x, float y) {
         String stationComplex = (String)getProperty("station_complex");
-        String totalRidership = (String)getProperty("total_ridership");
+        String totalRidership;
+
+        {
+            String _totalRidership = (String)getProperty("total_ridership");
+            totalRidership = String.format("Total ridership: %s", _totalRidership);
+        }
 
         pg.pushStyle();
 
