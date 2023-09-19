@@ -29,18 +29,20 @@ public class MTAMap extends PApplet {
     public void setup() {
         int mapWidth = 800;
         int mapHeight = 600;
-        int offset = 50;
+        int offset = 25;
 
         size(mapWidth, mapHeight, OPENGL);
 
-        map = new UnfoldingMap(this, offset, offset, mapWidth - offset, mapHeight - offset);
+        Location newYorkCity = new Location(40.712778, -73.75);
+        map = new UnfoldingMap(this, offset, offset, mapWidth - 2 * offset, mapHeight - 2 * offset);
+        map.zoomAndPanTo(10, newYorkCity);
         MapUtils.createDefaultEventDispatcher(this, map);
 
         map.addMarkers(subwayMarkers);
     }
 
     public void draw() {
-        background(200);
+        background(165, 103, 41);
         map.draw();
     }
 
