@@ -24,7 +24,7 @@ public class SubwayMarker extends CommonMarker {
         pg.rectMode(PConstants.CORNER);
 
         pg.stroke(110);
-        pg.fill(255,255,255);
+        pg.fill(255, 255, 0);
         pg.rect(x, y + 15, pg.textWidth(stationComplex) +6, 18, 5);
 
         pg.textAlign(PConstants.LEFT, PConstants.TOP);
