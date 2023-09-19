@@ -16,6 +16,7 @@ import processing.core.PApplet;
 public class MTAMap extends PApplet {
     private UnfoldingMap map;
     private List<Marker> subwayMarkers;
+    private CommonMarker lastSelected;
 
     public MTAMap(List<PointFeature> pointFeatures) {
         subwayMarkers = new ArrayList<>();
@@ -44,6 +45,25 @@ public class MTAMap extends PApplet {
     public void draw() {
         background(165, 103, 41);
         map.draw();
+    }
+
+    /* Event handling */
+    public void mouseMoved() {
+        // clear the last selection
+        if (lastSelected != null) {
+            lastSelected.setSelected(false);
+            lastSelected = null;
+        }
+
+        for (Marker marker : subwayMarkers) {
+            CommonMarker commonMarker = (CommonMarker)marker;
+
+            if (commonMarker.isInside(map, mouseX, mouseY)) {
+                lastSelected = commonMarker;
+                commonMarker.setSelected(true);
+                return;
+            }
+        }
     }
 
     public static void main(String[] args) {
