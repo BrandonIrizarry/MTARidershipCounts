@@ -26,18 +26,26 @@ public class MTAMap extends PApplet {
         subwayMarkers = new ArrayList<>();
         totalRidershipTable = new HashMap<>();
 
+        // Find all the total ridership counts, and add those as
+        // properties later
         for (PointFeature pointFeature : pointFeatures) {
-            // Gather map markers
-            SubwayMarker subwayMarker = new SubwayMarker(pointFeature);
-            subwayMarkers.add(subwayMarker);
-
-            // Build totalRidershipTable
             int currentRidershipCount = Integer.parseInt(getStringProperty(pointFeature, "ridership"));
             String stationComplexID = getStringProperty(pointFeature, "station_complex_id");
             int ridershipCount = totalRidershipTable.getOrDefault(stationComplexID, 0);
 
             ridershipCount += currentRidershipCount;
             totalRidershipTable.put(stationComplexID, ridershipCount);
+        }
+
+        for (PointFeature pointFeature : pointFeatures) {
+            // Add the total ridership as a property
+            String stationComplexID = getStringProperty(pointFeature, "station_complex_id");
+            int ridershipCount = totalRidershipTable.get(stationComplexID);
+            pointFeature.putProperty("total_ridership", ridershipCount);
+
+            // Create and include the marker
+            SubwayMarker subwayMarker = new SubwayMarker(pointFeature);
+            subwayMarkers.add(subwayMarker);
         }
     }
 
@@ -54,8 +62,6 @@ public class MTAMap extends PApplet {
         MapUtils.createDefaultEventDispatcher(this, map);
 
         map.addMarkers(subwayMarkers);
-
-        System.out.println(totalRidershipTable);
     }
 
     public void draw() {
