@@ -41,7 +41,7 @@ public class MTAMap extends PApplet {
             // Add the total ridership as a property
             String stationComplexID = getStringProperty(pointFeature, "station_complex_id");
             int ridershipCount = totalRidershipTable.get(stationComplexID);
-            pointFeature.putProperty("total_ridership", ridershipCount);
+            pointFeature.putProperty("total_ridership", Integer.toString(ridershipCount));
 
             // Create and include the marker
             SubwayMarker subwayMarker = new SubwayMarker(pointFeature);
