@@ -33,8 +33,8 @@ public class StationComplexIDTable {
                 dataTable.put("station_complex", record.get("station_complex"));
                 dataTable.put("borough", record.get("borough"));
                 dataTable.put("routes", fixRoutes(record.get("routes")));
-                dataTable.put("latitude", record.get("latitude"));
-                dataTable.put("longitude", record.get("longitude"));
+                dataTable.put("latitude", Double.parseDouble(record.get("latitude")));
+                dataTable.put("longitude", Double.parseDouble(record.get("longitude")));
 
                 // Include transfer data along with the ridership data
                 int count = Integer.parseInt(record.get("ridership")) + Integer.parseInt(record.get("transfers"));
