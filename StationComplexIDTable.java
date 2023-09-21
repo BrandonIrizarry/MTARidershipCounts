@@ -71,6 +71,7 @@ public class StationComplexIDTable {
         return format;
     }
 
+    // Let's test what kind of table we get by printing it out.
     public static void main(String[] args) {
         if (args.length != 1) { System.out.println("Missing command line arg"); System.exit(1); }
 
