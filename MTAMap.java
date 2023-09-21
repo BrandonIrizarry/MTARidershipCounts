@@ -91,7 +91,7 @@ public class MTAMap extends PApplet {
     public static void main(String[] args) {
         if (args.length != 1) {
             System.out.println("Missing datafile command-line argument");
-            return;
+            System.exit(1);
         }
 
         String dataFilename = args[0];
