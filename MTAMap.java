@@ -1,6 +1,7 @@
 package module_beyond;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,7 +9,6 @@ import de.fhpotsdam.unfolding.data.PointFeature;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.marker.Marker;
-import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 
 import processing.core.PApplet;
@@ -18,34 +18,17 @@ public class MTAMap extends PApplet {
     private List<Marker> subwayMarkers;
     private CommonMarker lastSelected;
 
-    // Map 'station_complex_id' to total ridership for this day
-    // (e.g. Jan 1, 2023)
-    private HashMap<String, Integer> totalRidershipTable;
-
-    public MTAMap(List<PointFeature> pointFeatures) {
+    public MTAMap(StationComplexIDTable table) {
         subwayMarkers = new ArrayList<>();
-        totalRidershipTable = new HashMap<>();
 
-        // Find all the total ridership counts, and add those as
-        // properties later
-        for (PointFeature pointFeature : pointFeatures) {
-            int currentRidershipCount = Integer.parseInt(getStringProperty(pointFeature, "ridership"));
-            String stationComplexID = getStringProperty(pointFeature, "station_complex_id");
-            int ridershipCount = totalRidershipTable.getOrDefault(stationComplexID, 0);
+        for (Map.Entry<String, HashMap<String, Object>> stationEntry : table.stationComplexIDTable.entrySet()) {
+            HashMap<String, Object> subTable = stationEntry.getValue();
+            Location stationLocation = new Location((double)subTable.get("latitude"), (double)subTable.get("longitude"));
 
-            ridershipCount += currentRidershipCount;
-            totalRidershipTable.put(stationComplexID, ridershipCount);
-        }
-
-        for (PointFeature pointFeature : pointFeatures) {
-            // Add the total ridership as a property
-            String stationComplexID = getStringProperty(pointFeature, "station_complex_id");
-            int ridershipCount = totalRidershipTable.get(stationComplexID);
-            pointFeature.putProperty("total_ridership", Integer.toString(ridershipCount));
-
-            // Create and include the marker
-            SubwayMarker subwayMarker = new SubwayMarker(pointFeature);
-            subwayMarkers.add(subwayMarker);
+            PointFeature point = new PointFeature(stationLocation);
+            point.setProperties(subTable);
+            point.putProperty("station_complex_id", stationEntry.getKey());
+            subwayMarkers.add(new SubwayMarker(point));
         }
     }
 
@@ -95,9 +78,9 @@ public class MTAMap extends PApplet {
         }
 
         String dataFilename = args[0];
-        List<PointFeature> pointFeatures = Parser.parse(dataFilename);
+        StationComplexIDTable table = new StationComplexIDTable(dataFilename);
 
-        MTAMap app = new MTAMap(pointFeatures);
+        MTAMap app = new MTAMap(table);
         PApplet.runSketch(new String[]{"MTAMap"}, app);
     }
 }
