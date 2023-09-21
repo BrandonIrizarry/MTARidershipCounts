@@ -69,10 +69,6 @@ public class MTAMap extends PApplet {
         map.draw();
     }
 
-    private String getStringProperty(PointFeature pointFeature, String propertyName) {
-        return (String)pointFeature.getProperty(propertyName);
-    }
-
     /* Event handling */
     public void mouseMoved() {
         // clear the last selection
