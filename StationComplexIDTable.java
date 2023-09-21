@@ -11,7 +11,7 @@ import java.nio.charset.StandardCharsets;
 import org.apache.commons.csv.*;
 
 public class StationComplexIDTable {
-    private HashMap<String, HashMap<String, Object>> stationComplexIDTable;
+    public HashMap<String, HashMap<String, Object>> stationComplexIDTable;
 
     public StationComplexIDTable(String filename) {
         CSVParser parser = null;
