@@ -25,6 +25,8 @@ public class SubwayMarker extends CommonMarker {
             totalRidership = String.format("Total ridership: %d", _totalRidership);
         }
 
+        String stationComplexID = getStringProperty("station_complex_id");
+
         pg.pushStyle();
 
         pg.rectMode(PConstants.CORNER);
@@ -40,7 +42,7 @@ public class SubwayMarker extends CommonMarker {
 
         // Use a reasonable hard-coded constant, lest we end up with a
         // somewhat complicated expression for this.
-        int boxHeight = 40;
+        int boxHeight = 4 * lineHeight;
 
         pg.stroke(110);
         pg.fill(255, 255, 0);
@@ -50,6 +52,7 @@ public class SubwayMarker extends CommonMarker {
         pg.fill(0);
         pg.text(stationComplex, x + xOffset + textMarginX, y + yOffset + textMarginY);
         pg.text(totalRidership, x + xOffset + textMarginX, y + yOffset + textMarginY + lineHeight);
+        pg.text(stationComplexID, x + xOffset + textMarginX, y + yOffset + textMarginY + 2 * lineHeight);
 
         pg.popStyle();
     }
