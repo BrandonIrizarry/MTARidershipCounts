@@ -61,10 +61,16 @@ public class MTAMap extends PApplet {
                 SubwayMarker first = stations.get(i);
                 SubwayMarker second = stations.get(i + 1);
 
-                if (first.sharesARoute(second)) {
-                    Location locationOfFirst = first.getLocation();
-                    Location locationOfSecond = second.getLocation();
+                Location locationOfFirst = first.getLocation();
+                Location locationOfSecond = second.getLocation();
+                double distance = locationOfFirst.getDistance(locationOfSecond);
 
+                // Based on code in a debug branch that prints out the
+                // top 10 greatest distances between stations, there
+                // are four outlier distances, the smallest of which
+                // is approximately 14.48 km. It's reasonable to
+                // assume these four are bogus, so rule them out.
+                if (first.sharesARoute(second) && distance < 14.0) {
                     SimpleLinesMarker path = new SimpleLinesMarker(locationOfFirst, locationOfSecond);
                     paths.add(path);
                 }
