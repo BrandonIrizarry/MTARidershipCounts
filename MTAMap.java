@@ -45,6 +45,7 @@ public class MTAMap extends PApplet {
             routeTable.put(prefix, stations);
         }
 
+        // Define the paths between stations
         paths = new ArrayList<>();
 
         for (List<SubwayMarker> stations : routeTable.values()) {
