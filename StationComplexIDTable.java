@@ -3,29 +3,15 @@ package module_beyond;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
-
-// Specific to parsing
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import org.apache.commons.csv.*;
+import org.apache.commons.csv.CSVRecord;
 
 public class StationComplexIDTable {
     public HashMap<String, HashMap<String, Object>> stationComplexIDTable;
 
     public StationComplexIDTable(String filename) {
-        CSVParser parser = null;
-
-        try {
-            File csvData = new File(filename);
-            parser = CSVParser.parse(csvData, StandardCharsets.UTF_8, getCSVFormat());
-        } catch (IOException e) {
-            System.out.println("An error occurred when parsing the data file");
-        }
-
         stationComplexIDTable = new HashMap<>();
 
-        for (CSVRecord record : parser) {
+        for (CSVRecord record : (new LocalCSVParser(filename)).getCSVParser()) {
             String stationComplexID = record.get("station_complex_id");
             HashMap<String, Object> dataTable = stationComplexIDTable.getOrDefault(stationComplexID, new HashMap<>());
 
@@ -61,14 +47,6 @@ public class StationComplexIDTable {
         Arrays.sort(routesArray);
 
         return routesArray;
-    }
-
-    private CSVFormat getCSVFormat() {
-        CSVFormat.Builder builder = CSVFormat.Builder.create();
-        builder.setHeader();
-        CSVFormat format = builder.build();
-
-        return format;
     }
 
     // Let's test what kind of table we get by printing it out.
