@@ -1,5 +1,6 @@
 package module_beyond;
 
+import java.util.Collections;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -29,6 +30,23 @@ public class MTAMap extends PApplet {
             point.setProperties(subTable);
             point.putProperty("station_complex_id", stationEntry.getKey());
             subwayMarkers.add(new SubwayMarker(point));
+        }
+
+        // Use station complex id prefixes to identify routes; map
+        // prefixes to markers belonging in that route.
+        HashMap<Character, List<SubwayMarker>> routeTable = new HashMap<>();
+
+        for (Marker subwayMarker : subwayMarkers) {
+            char prefix = ((SubwayMarker) subwayMarker).getCharPrefix();
+            List<SubwayMarker> stations = routeTable.getOrDefault(prefix, new ArrayList<>());
+            stations.add((SubwayMarker)subwayMarker);
+            routeTable.put(prefix, stations);
+        }
+
+        // Sort each list of markers (by numerical index)
+        for (List<SubwayMarker> stations : routeTable.values()) {
+            Collections.sort(stations);
+            System.out.println(stations);
         }
     }
 
