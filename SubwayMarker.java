@@ -37,6 +37,21 @@ public class SubwayMarker extends CommonMarker implements Comparable<SubwayMarke
         return getStringProperty("station_complex_id");
     }
 
+    public boolean sharesARoute(SubwayMarker subwayMarker) {
+        String[] routes_1 = (String[])getProperty("routes");
+        String[] routes_2 = (String[])subwayMarker.getProperty("routes");
+
+        for (String route_1 : routes_1) {
+            for (String route_2 : routes_2) {
+                if (route_1.equals(route_2)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public void drawMarker(PGraphics pg, float x, float y) {
         pg.fill(255, 255, 0);

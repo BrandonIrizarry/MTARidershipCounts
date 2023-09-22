@@ -56,7 +56,7 @@ public class MTAMap extends PApplet {
 
                 int difference  = second.getNumericalIndex() - first.getNumericalIndex();
 
-                if (difference <= 10) {
+                if (difference <= 10 && first.sharesARoute(second)) {
                     SimpleLinesMarker path = new SimpleLinesMarker(first.getLocation(), second.getLocation());
                     paths.add(path);
                 }
