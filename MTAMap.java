@@ -46,7 +46,15 @@ public class MTAMap extends PApplet {
         // Sort each list of markers (by numerical index)
         for (List<SubwayMarker> stations : routeTable.values()) {
             Collections.sort(stations);
-            System.out.println(stations);
+
+            for (int i = 0; i < stations.size() - 1; i++) {
+                SubwayMarker first = stations.get(i);
+                SubwayMarker second = stations.get(i + 1);
+
+                System.out.printf("%d ", second.getNumericalIndex() - first.getNumericalIndex());
+            }
+
+            System.out.println();
         }
     }
 
