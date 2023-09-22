@@ -10,6 +10,7 @@ import de.fhpotsdam.unfolding.data.PointFeature;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.marker.Marker;
+import de.fhpotsdam.unfolding.marker.SimpleLinesMarker;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 
 import processing.core.PApplet;
@@ -17,6 +18,7 @@ import processing.core.PApplet;
 public class MTAMap extends PApplet {
     private UnfoldingMap map;
     private List<Marker> subwayMarkers;
+    private List<Marker> paths;
     private CommonMarker lastSelected;
 
     public MTAMap(StationComplexIDTable table) {
@@ -43,7 +45,8 @@ public class MTAMap extends PApplet {
             routeTable.put(prefix, stations);
         }
 
-        // Sort each list of markers (by numerical index)
+        paths = new ArrayList<>();
+
         for (List<SubwayMarker> stations : routeTable.values()) {
             Collections.sort(stations);
 
@@ -51,10 +54,13 @@ public class MTAMap extends PApplet {
                 SubwayMarker first = stations.get(i);
                 SubwayMarker second = stations.get(i + 1);
 
-                System.out.printf("%d ", second.getNumericalIndex() - first.getNumericalIndex());
-            }
+                int difference  = second.getNumericalIndex() - first.getNumericalIndex();
 
-            System.out.println();
+                if (difference <= 10) {
+                    SimpleLinesMarker path = new SimpleLinesMarker(first.getLocation(), second.getLocation());
+                    paths.add(path);
+                }
+            }
         }
     }
 
@@ -71,6 +77,7 @@ public class MTAMap extends PApplet {
         MapUtils.createDefaultEventDispatcher(this, map);
 
         map.addMarkers(subwayMarkers);
+        map.addMarkers(paths);
     }
 
     public void draw() {
