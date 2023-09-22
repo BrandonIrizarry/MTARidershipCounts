@@ -49,16 +49,23 @@ public class MTAMap extends PApplet {
         paths = new ArrayList<>();
 
         for (List<SubwayMarker> stations : routeTable.values()) {
+            // We can sort, since the stations' order on a given route
+            // is _more or less_ determined by the order implied by
+            // their numerical indices. It turns out this gets us most
+            // of the way there!
             Collections.sort(stations);
 
+            // Add a line marker between each consecutive pair of
+            // stations
             for (int i = 0; i < stations.size() - 1; i++) {
                 SubwayMarker first = stations.get(i);
                 SubwayMarker second = stations.get(i + 1);
 
-                int difference  = second.getNumericalIndex() - first.getNumericalIndex();
+                if (first.sharesARoute(second)) {
+                    Location locationOfFirst = first.getLocation();
+                    Location locationOfSecond = second.getLocation();
 
-                if (difference <= 10 && first.sharesARoute(second)) {
-                    SimpleLinesMarker path = new SimpleLinesMarker(first.getLocation(), second.getLocation());
+                    SimpleLinesMarker path = new SimpleLinesMarker(locationOfFirst, locationOfSecond);
                     paths.add(path);
                 }
             }
