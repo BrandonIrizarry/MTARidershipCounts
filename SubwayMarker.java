@@ -4,9 +4,37 @@ import de.fhpotsdam.unfolding.data.PointFeature;
 import processing.core.PGraphics;
 import processing.core.PConstants;
 
-public class SubwayMarker extends CommonMarker {
+public class SubwayMarker extends CommonMarker implements Comparable<SubwayMarker> {
     public SubwayMarker(PointFeature pointFeature) {
         super(pointFeature.getLocation(), pointFeature.getProperties());
+    }
+
+    public char getCharPrefix() {
+        return getStringProperty("station_complex_id").charAt(0);
+    }
+
+    public int getNumericalIndex() {
+        String stationComplexID = getStringProperty("station_complex_id");
+
+        // Station complex ID ends in a letter
+        if (stationComplexID.matches("^[A-Z]\\d+[A-Z]$")) {
+            return Integer.parseInt(stationComplexID.substring(1, stationComplexID.length() - 1));
+        }
+
+        // Station complex ID ends in digits only
+        return Integer.parseInt(stationComplexID.substring(1));
+    }
+
+    // In practice, we should only be comparing subway markers whose
+    // IDs have the same letter prefix, e.g. 'N' (to be clear, these
+    // prefixes have nothing to do with the letter names of the routes
+    // at those stations.)
+    public int compareTo(SubwayMarker subwayMarker) {
+        return Integer.compare(getNumericalIndex(), subwayMarker.getNumericalIndex());
+    }
+
+    public String toString() {
+        return getStringProperty("station_complex_id");
     }
 
     @Override
