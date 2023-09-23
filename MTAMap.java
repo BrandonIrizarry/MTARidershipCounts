@@ -21,6 +21,7 @@ public class MTAMap extends PApplet {
     private UnfoldingMap map;
     private List<Marker> subwayMarkers;
     private List<Marker> paths;
+    private List<Marker> allMarkers; // used for hiding and showing
     private CommonMarker lastSelected;
 
     public MTAMap(StationComplexIDTable table) {
@@ -99,6 +100,11 @@ public class MTAMap extends PApplet {
 
             paths.add(new SimpleLinesMarker(firstLocation, secondLocation));
         }
+
+        // Collect all markers into a single ArrayList
+        allMarkers = new ArrayList<>();
+        allMarkers.addAll(subwayMarkers);
+        allMarkers.addAll(paths);
     }
 
     private Location getLocationFromID(StationComplexIDTable table, String id) {
@@ -182,15 +188,33 @@ public class MTAMap extends PApplet {
             lastSelected = null;
         }
 
+        boolean found = overSubwayMarker();
+
+        if (found) {
+            for (Marker marker : allMarkers) {
+                if (!marker.equals(lastSelected)) {
+                    marker.setHidden(true);
+                }
+            }
+        } else {
+            for (Marker marker : allMarkers) {
+                marker.setHidden(false);
+            }
+        }
+    }
+
+    private boolean overSubwayMarker() {
         for (Marker marker : subwayMarkers) {
             CommonMarker commonMarker = (CommonMarker)marker;
 
             if (commonMarker.isInside(map, mouseX, mouseY)) {
                 lastSelected = commonMarker;
                 commonMarker.setSelected(true);
-                return;
+                return true;
             }
         }
+
+        return false;
     }
 
     public static void main(String[] args) {
