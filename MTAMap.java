@@ -63,6 +63,16 @@ public class MTAMap extends PApplet {
                 SubwayMarker first = stations.get(i);
                 SubwayMarker second = stations.get(i + 1);
 
+                // This is the one case where numerically
+                // "consecutive" stations which share a line (in this
+                // case, the 'A') aren't, in fact, consecutive along a
+                // given route. So we "remove" this edge by skipping
+                // its creation.
+                if (first.getStringProperty("station_complex_id").equals("N187")
+                    && second.getStringProperty("station_complex_id").equals("N191")) {
+                    continue;
+                }
+
                 Location locationOfFirst = first.getLocation();
                 Location locationOfSecond = second.getLocation();
                 double distance = locationOfFirst.getDistance(locationOfSecond);
