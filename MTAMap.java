@@ -117,6 +117,51 @@ public class MTAMap extends PApplet {
     public void draw() {
         background(165, 103, 41);
         map.draw();
+        addKey();
+    }
+
+    private void addKey() {
+        // Remember you can use Processing's graphics methods here
+        fill(255, 250, 240);
+
+        int xbase = 25;
+        int ybase = 25;
+        int lineHeight = 20;
+        int leftMargin = 10;
+        int topMargin = 10;
+
+        rect(xbase, ybase, 75, 150);
+
+        fill(0);
+        textAlign(LEFT, CENTER);
+        textSize(12);
+        text("Key", 2 * xbase, ybase + topMargin);
+
+        int blue = color(0, 0, 255);
+        int green = color(0, 255, 0);
+        int yellow = color(255, 255, 0);
+        int purple = color(255, 0, 255);
+        int red = color(255, 0, 0);
+        int black = color(0, 0, 0);
+
+        fill(blue);
+        ellipse(xbase + leftMargin, ybase + 2 * lineHeight, 12, 12);
+        fill(green);
+        ellipse(xbase + leftMargin, ybase + 3 * lineHeight, 12, 12);
+        fill(yellow);
+        ellipse(xbase + leftMargin, ybase + 4 * lineHeight, 12, 12);
+        fill(purple);
+        ellipse(xbase + leftMargin, ybase + 5 * lineHeight, 12, 12);
+        fill(red);
+        ellipse(xbase + leftMargin, ybase + 6 * lineHeight, 12, 12);
+
+        fill(black);
+        textAlign(LEFT, CENTER);
+        text("<250K", xbase + 20, ybase + 2 * lineHeight);
+        text("250-500K", xbase + 20, ybase + 3 * lineHeight);
+        text("500-750K", xbase + 20, ybase + 4 * lineHeight);
+        text("750K-1M", xbase + 20, ybase + 5 * lineHeight);
+        text("+1M", xbase + 20, ybase + 6 * lineHeight);
     }
 
     /* Event handling */
