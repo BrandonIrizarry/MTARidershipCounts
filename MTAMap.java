@@ -23,6 +23,7 @@ public class MTAMap extends PApplet {
     private List<Marker> paths;
     private List<Marker> allMarkers; // used for hiding and showing
     private CommonMarker lastSelected;
+    private boolean allHidden = false;
 
     public MTAMap(StationComplexIDTable table) {
         subwayMarkers = new ArrayList<>();
@@ -188,33 +189,43 @@ public class MTAMap extends PApplet {
             lastSelected = null;
         }
 
-        boolean found = overSubwayMarker();
+        CommonMarker foundMarker = overSubwayMarker();
 
-        if (found) {
+        if (foundMarker != null) {
+            if (allHidden) {
+                lastSelected = foundMarker;
+                lastSelected.setSelected(true);
+                return;
+            };
+
             for (Marker marker : allMarkers) {
-                if (!marker.equals(lastSelected)) {
+                if (!marker.equals(foundMarker)) {
                     marker.setHidden(true);
                 }
             }
+
+            lastSelected = foundMarker;
+            lastSelected.setSelected(true);
+            allHidden = true;
         } else {
             for (Marker marker : allMarkers) {
                 marker.setHidden(false);
             }
+
+            allHidden = false;
         }
     }
 
-    private boolean overSubwayMarker() {
+    private CommonMarker overSubwayMarker() {
         for (Marker marker : subwayMarkers) {
             CommonMarker commonMarker = (CommonMarker)marker;
 
             if (commonMarker.isInside(map, mouseX, mouseY)) {
-                lastSelected = commonMarker;
-                commonMarker.setSelected(true);
-                return true;
+                return commonMarker;
             }
         }
 
-        return false;
+        return null;
     }
 
     public static void main(String[] args) {
