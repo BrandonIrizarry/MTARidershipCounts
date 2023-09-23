@@ -54,7 +54,31 @@ public class SubwayMarker extends CommonMarker implements Comparable<SubwayMarke
 
     @Override
     public void drawMarker(PGraphics pg, float x, float y) {
-        pg.fill(255, 255, 0);
+        int blue = pg.color(0, 0, 255);
+        int green = pg.color(0, 255, 0);
+        int yellow = pg.color(255, 255, 0);
+        int purple = pg.color(255, 0, 255);
+        int red = pg.color(255, 0, 0);
+        int black = pg.color(0, 0, 0);
+
+        int totalRidership = (Integer)getProperty("total_ridership");
+        int color = black;
+
+        if (totalRidership < 250000) {
+            color = blue;
+        } else if (totalRidership >= 250000 && totalRidership < 500000) {
+            color = green;
+        } else if (totalRidership >= 500000 && totalRidership < 750000) {
+            color = yellow;
+        } else if (totalRidership >= 750000 && totalRidership < 1000000) {
+            color = purple;
+        } else if (totalRidership >= 1000000) {
+            color = red;
+        } else {
+            assert(false) : "Unreachable code";
+        }
+
+        pg.fill(color);
         pg.ellipse(x, y, 5, 5);
     }
 
