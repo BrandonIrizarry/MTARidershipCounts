@@ -15,6 +15,8 @@ import de.fhpotsdam.unfolding.utils.MapUtils;
 
 import processing.core.PApplet;
 
+import org.apache.commons.csv.CSVRecord;
+
 public class MTAMap extends PApplet {
     private UnfoldingMap map;
     private List<Marker> subwayMarkers;
@@ -76,6 +78,24 @@ public class MTAMap extends PApplet {
                 }
             }
         }
+
+        // Add paths not found by our station-id heuristic
+        for (CSVRecord record : (new LocalCSVParser("data/additional-paths.csv")).getCSVParser()) {
+            String firstID = record.get("first");
+            String secondID = record.get("second");
+
+            Location firstLocation = getLocationFromID(table, firstID);
+            Location secondLocation = getLocationFromID(table, secondID);
+
+            paths.add(new SimpleLinesMarker(firstLocation, secondLocation));
+        }
+    }
+
+    private Location getLocationFromID(StationComplexIDTable table, String id) {
+        Object latitude = table.stationComplexIDTable.get(id).get("latitude");
+        Object longitude = table.stationComplexIDTable.get(id).get("longitude");
+
+        return new Location((Double)latitude, (Double)longitude);
     }
 
     public void setup() {
