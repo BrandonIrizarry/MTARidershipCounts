@@ -192,12 +192,6 @@ public class MTAMap extends PApplet {
         CommonMarker foundMarker = overSubwayMarker();
 
         if (foundMarker != null) {
-            if (allHidden) {
-                lastSelected = foundMarker;
-                lastSelected.setSelected(true);
-                return;
-            };
-
             for (Marker marker : allMarkers) {
                 if (!marker.equals(foundMarker)) {
                     marker.setHidden(true);
