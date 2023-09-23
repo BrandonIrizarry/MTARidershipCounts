@@ -92,7 +92,7 @@ public class SubwayMarker extends CommonMarker implements Comparable<SubwayMarke
             totalRidership = String.format("Total ridership: %d", _totalRidership);
         }
 
-        String stationComplexID = getStringProperty("station_complex_id");
+        String stationComplexID = String.format("Station complex ID: %s", getStringProperty("station_complex_id"));
 
         pg.pushStyle();
 
@@ -104,7 +104,9 @@ public class SubwayMarker extends CommonMarker implements Comparable<SubwayMarke
         int textMarginY = 3;
         int cornerRadius = 5;
         int horizontalPadding = 2 * textMarginX;
-        int boxWidth = (int)Math.max(pg.textWidth(stationComplex), pg.textWidth(totalRidership)) + horizontalPadding;
+        int boxWidth = (int)Math.max(pg.textWidth(stationComplexID),
+                                     Math.max(pg.textWidth(totalRidership),
+                                              pg.textWidth(stationComplex))) + horizontalPadding;
         int lineHeight = 15;
 
         // Use a reasonable hard-coded constant, lest we end up with a
